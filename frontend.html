@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundation Learning Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .header p {
+            text-align: center;
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2d3748;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 20px;
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            text-align: center;
+            color: #718096;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover .file-upload-label {
+            background: #edf2f7;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            margin-right: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: end;
+        }
+
+        .search-bar .form-group {
+            flex: 1;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .student-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .student-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .student-id {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .student-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #718096;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+            font-size: 1.2em;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #38a169;
+            display: none;
+        }
+
+        .uploaded-files {
+            margin-top: 15px;
+        }
+
+        .uploaded-file {
+            display: inline-block;
+            background: #e6fffa;
+            color: #234e52;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 5px;
+            border: 1px solid #81e6d9;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .student-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Foundation Learning Management System</h1>
+            <p>Empowering Education Through Digital Innovation | Training 15,000+ Students Across India</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="showSection('addStudent')">➕ Add Student</button>
+            <button class="nav-tab" onclick="showSection('searchStudents')">🔍 Search Students</button>
+            <button class="nav-tab" onclick="showSection('reports')">📈 Reports</button>
+        </div>
+
+        <div id="dashboard" class="content-section active">
+            <h2 style="margin-bottom: 30px; color: #2d3748;">📊 Dashboard Overview</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalStudents">1,247</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="activeStudents">856</div>
+                    <div class="stat-label">Active Students</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedCourses">391</div>
+                    <div class="stat-label">Completed Courses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="placements">234</div>
+                    <div class="stat-label">Job Placements</div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 20px; color: #2d3748;">Recent Activity</h3>
+            <div id="recentActivity">
+                <!-- Recent students will be populated here -->
+            </div>
+        </div>
+
+        <div id="addStudent" class="content-section">
+            <h2 style="margin-bottom: 30px; color: #2d3748;">➕ Add New Student</h2>
+            
+            <div class="success-message" id="successMessage">
+                Student added successfully! 🎉
+            </div>
+
+            <form id="studentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="studentName">Full Name *</label>
+                        <input type="text" id="studentName" name="studentName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentId">Student ID</label>
+                        <input type="text" id="studentId" name="studentId" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="course">Course/Program *</label>
+                        <select id="course" name="course" required>
+                            <option value="">Select Course</option>
+                            <option value="Computer Skills">Computer Skills</option>
+                            <option value="Data Entry">Data Entry</option>
+                            <option value="Digital Literacy">Digital Literacy</option>
+                            <option value="Construction Skills">Construction Skills</option>
+                            <option value="Handicrafts">Handicrafts</option>
+                            <option value="Business Skills">Business Skills</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingCenter">Training Center</label>
+                        <select id="trainingCenter" name="trainingCenter">
+                            <option value="">Select Training Center</option>
+                            <option value="Mumbai Center">Mumbai Center</option>
+                            <option value="Chennai Center">Chennai Center</option>
+                            <option value="Bangalore Center">Bangalore Center</option>
+                            <option value="Hyderabad Center">Hyderabad Center</option>
+                            <option value="Pune Center">Pune Center</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="enrollmentDate">Enrollment Date</label>
+                        <input type="date" id="enrollmentDate" name="enrollmentDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergencyContact">Emergency Contact</label>
+                        <input type="tel" id="emergencyContact" name="emergencyContact">
+                    </div>
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0; color: #2d3748;">📎 Document Uploads</h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Application Form</label>
+                        <div class="file-upload">
+                            <input type="file" id="applicationForm" name="applicationForm" accept=".pdf,.jpg,.jpeg,.png">
+                            <label for="applicationForm" class="file-upload-label">
+                                📄 Click to upload Application Form
+                            </label>
+                        </div>
+                        <div id="applicationFormFiles" class="uploaded-files"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Attendance Sheet</label>
+                        <div class="file-upload">
+                            <input type="file" id="attendanceSheet" name="attendanceSheet" accept=".pdf,.jpg,.jpeg,.png">
+                            <label for="attendanceSheet" class="file-upload-label">
+                                📊 Click to upload Attendance Sheet
+                            </label>
+                        </div>
+                        <div id="attendanceSheetFiles" class="uploaded-files"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Placement Confirmation</label>
+                        <div class="file-upload">
+                            <input type="file" id="placementDoc" name="placementDoc" accept=".pdf,.jpg,.jpeg,.png">
+                            <label for="placementDoc" class="file-upload-label">
+                                💼 Click to upload Placement Document
+                            </label>
+                        </div>
+                        <div id="placementDocFiles" class="uploaded-files"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Clear Form</button>
+                    <button type="submit" class="btn">Add Student</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="searchStudents" class="content-section">
+            <h2 style="margin-bottom: 30px; color: #2d3748;">🔍 Search Students</h2>
+            
+            <div class="search-bar">
+                <div class="form-group">
+                    <label for="searchInput">Search by Name, Phone, or Student ID</label>
+                    <input type="text" id="searchInput" placeholder="Enter search term...">
+                </div>
+                <div class="form-group">
+                    <label for="courseFilter">Filter by Course</label>
+                    <select id="courseFilter">
+                        <option value="">All Courses</option>
+                        <option value="Computer Skills">Computer Skills</option>
+                        <option value="Data Entry">Data Entry</option>
+                        <option value="Digital Literacy">Digital Literacy</option>
+                        <option value="Construction Skills">Construction Skills</option>
+                        <option value="Handicrafts">Handicrafts</option>
+                        <option value="Business Skills">Business Skills</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn" onclick="searchStudents()" style="margin-top: 0;">Search</button>
+                </div>
+            </div>
+
+            <div id="searchResults">
+                <!-- Search results will be populated here -->
+            </div>
+        </div>
+
+        <div id="reports" class="content-section">
+            <h2 style="margin-bottom: 30px; color: #2d3748;">📈 Reports & Analytics</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="reportType">Report Type</label>
+                    <select id="reportType">
+                        <option value="">Select Report Type</option>
+                        <option value="enrollment">Enrollment Report</option>
+                        <option value="completion">Course Completion Report</option>
+                        <option value="placement">Placement Report</option>
+                        <option value="attendance">Attendance Report</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dateFrom">From Date</label>
+                    <input type="date" id="dateFrom">
+                </div>
+                
+                <div class="form-group">
+                    <label for="dateTo">To Date</label>
+                    <input type="date" id="dateTo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="centerFilter">Training Center</label>
+                    <select id="centerFilter">
+                        <option value="">All Centers</option>
+                        <option value="Mumbai Center">Mumbai Center</option>
+                        <option value="Chennai Center">Chennai Center</option>
+                        <option value="Bangalore Center">Bangalore Center</option>
+                        <option value="Hyderabad Center">Hyderabad Center</option>
+                        <option value="Pune Center">Pune Center</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center;">
+                <button type="button" class="btn" onclick="generateReport()">Generate Report</button>
+            </div>
+
+            <div id="reportResults" style="margin-top: 30px;">
+                <!-- Report results will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data storage
+        let students = [
+            {
+                id: 'STU-2024-001',
+                name: 'Priya Sharma',
+                phone: '+91-9876543210',
+                email: 'priya.sharma@email.com',
+                course: 'Computer Skills',
+                trainingCenter: 'Mumbai Center',
+                enrollmentDate: '2024-01-15',
+                status: 'Active',
+                dateOfBirth: '1998-05-20',
+                address: '123 Main Street, Mumbai, Maharashtra'
+            },
+            {
+                id: 'STU-2024-002',
+                name: 'Rajesh Kumar',
+                phone: '+91-9876543211',
+                email: 'rajesh.kumar@email.com',
+                course: 'Data Entry',
+                trainingCenter: 'Chennai Center',
+                enrollmentDate: '2024-02-10',
+                status: 'Completed',
+                dateOfBirth: '1995-08-15',
+                address: '456 Park Road, Chennai, Tamil Nadu'
+            },
+            {
+                id: 'STU-2024-003',
+                name: 'Anita Patel',
+                phone: '+91-9876543212',
+                email: 'anita.patel@email.com',
+                course: 'Digital Literacy',
+                trainingCenter: 'Bangalore Center',
+                enrollmentDate: '2024-01-20',
+                status: 'Active',
+                dateOfBirth: '2000-03-12',
+                address: '789 Tech Valley, Bangalore, Karnataka'
+            }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            generateStudentId();
+            displayRecentActivity();
+            updateDashboardStats();
+            setupFileUploads();
+        });
+
+        // Navigation functions
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Generate unique student ID
+        function generateStudentId() {
+            const year = new Date().getFullYear();
+            const randomNum = Math.floor(Math.random() * 900) + 100;
+            const studentId = `STU-${year}-${randomNum}`;
+            document.getElementById('studentId').value = studentId;
+        }
+
+        // Setup file upload handlers
+        function setupFileUploads() {
+            const fileInputs = ['applicationForm', 'attendanceSheet', 'placementDoc'];
+            
+            fileInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                input.addEventListener('change', function(e) {
+                    handleFileUpload(e, inputId);
+                });
+            });
+        }
+
+        function handleFileUpload(event, inputId) {
+            const file = event.target.files[0];
+            if (file) {
+                const filesContainer = document.getElementById(inputId + 'Files');
+                const fileElement = document.createElement('span');
+                fileElement.className = 'uploaded-file';
+                fileElement.textContent = `📎 ${file.name}`;
+                filesContainer.innerHTML = '';
+                filesContainer.appendChild(fileElement);
+            }
+        }
+
+        // Student form submission
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const studentData = {
+                id: formData.get('studentId'),
+                name: formData.get('studentName'),
+                phone: formData.get('phoneNumber'),
+                email: formData.get('email'),
+                course: formData.get('course'),
+                trainingCenter: formData.get('trainingCenter'),
+                enrollmentDate: formData.get('enrollmentDate'),
+                dateOfBirth: formData.get('dateOfBirth'),
+                address: formData.get('address'),
+                emergencyContact: formData.get('emergencyContact'),
+                status: 'Active'
+            };
+            
+            // Add to students array
+            students.push(studentData);
+            
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+            
+            // Reset form and generate new ID
+            resetForm();
+            updateDashboardStats();
+        });
+
+        function resetForm() {
+            document.getElementById('studentForm').reset();
+            generateStudentId();
+            
+            // Clear uploaded files
+            document.getElementById('applicationFormFiles').innerHTML = '';
+            document.getElementById('attendanceSheetFiles').innerHTML = '';
+            document.getElementById('placementDocFiles').innerHTML = '';
+        }
+
+        // Search functionality
+        function searchStudents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const courseFilter = document.getElementById('courseFilter').value;
+            
+            let filteredStudents = students.filter(student => {
+                const matchesSearch = student.name.toLowerCase().includes(searchTerm) || 
+                                    student.phone.includes(searchTerm) || 
+                                    student.id.toLowerCase().includes(searchTerm);
+                const matchesCourse = !courseFilter || student.course === courseFilter;
+                
+                return matchesSearch && matchesCourse;
+            });
+            
+            displaySearchResults(filteredStudents);
+        }
+
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">No students found matching your criteria.</div>';
+                return;
+            }
+            
+            resultsContainer.innerHTML = results.map(student => `
+                <div class="student-card">
+                    <div class="student-header">
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-id">${student.id}</div>
+                    </div>
+                    <div class="student-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">${student.phone}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Course</div>
+                            <div class="detail-value">${student.course}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Training Center</div>
+                            <div class="detail-value">${student.trainingCenter}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Enrollment Date</div>
+                            <div class="detail-value">${student.enrollmentDate}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value" style="color: ${student.status === 'Active' ? '#38a169' : '#667eea'}">${student.status}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">${student.email || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display recent activity on dashboard
+        function displayRecentActivity() {
+            const recentContainer = document.getElementById('recentActivity');
+            const recentStudents = students.slice(-3); // Show last 3 students
+            
+            if (recentStudents.length === 0) {
+                recentContainer.innerHTML = '<div class="no-results">No recent activity to display.</div>';
+                return;
+            }
+            
+            displaySearchResults(recentStudents);
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            const totalStudents = students.length;
+            const activeStudents = students.filter(s => s.status === 'Active').length;
+            const completedCourses = students.filter(s => s.status === 'Completed').length;
+            const placements = Math.floor(completedCourses * 0.6); // Assume 60% placement rate
+            
+            document.getElementById('totalStudents').textContent = totalStudents;
+            document.getElementById('activeStudents').textContent = activeStudents;
+            document.getElementById('completedCourses').textContent = completedCourses;
+            document.getElementById('placements').textContent = placements;
+        }
+
+        // Report generation
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const centerFilter = document.getElementById('centerFilter').value;
+            
+            if (!reportType) {
+                alert('Please select a report type.');
+                return;
+            }
+            
+            let filteredData = students.filter(student => {
+                let includeStudent = true;
+                
+                // Filter by date range if specified
+                if (dateFrom && student.enrollmentDate < dateFrom) {
+                    includeStudent = false;
+                }
+                if (dateTo && student.enrollmentDate > dateTo) {
+                    includeStudent = false;
+                }
+                
+                // Filter by training center if specified
+                if (centerFilter && student.trainingCenter !== centerFilter) {
+                    includeStudent = false;
+                }
+                
+                return includeStudent;
+            });
+            
+            generateReportDisplay(reportType, filteredData);
+        }
+
+        function generateReportDisplay(reportType, data) {
+            const resultsContainer = document.getElementById('reportResults');
+            let reportHTML = '';
+            
+            switch(reportType) {
+                case 'enrollment':
+                    reportHTML = generateEnrollmentReport(data);
+                    break;
+                case 'completion':
+                    reportHTML = generateCompletionReport(data);
+                    break;
+                case 'placement':
+                    reportHTML = generatePlacementReport(data);
+                    break;
+                case 'attendance':
+                    reportHTML = generateAttendanceReport(data);
+                    break;
+            }
+            
+            resultsContainer.innerHTML = reportHTML;
+        }
+
+        function generateEnrollmentReport(data) {
+            const courseStats = {};
+            const centerStats = {};
+            
+            data.forEach(student => {
+                // Count by course
+                courseStats[student.course] = (courseStats[student.course] || 0) + 1;
+                // Count by center
+                centerStats[student.trainingCenter] = (centerStats[student.trainingCenter] || 0) + 1;
+            });
+            
+            return `
+                <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #2d3748; margin-bottom: 20px;">📊 Enrollment Report</h3>
+                    <p style="color: #718096; margin-bottom: 25px;">Total Enrollments: <strong>${data.length}</strong></p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                        <div>
+                            <h4 style="color: #2d3748; margin-bottom: 15px;">By Course</h4>
+                            ${Object.entries(courseStats).map(([course, count]) => `
+                                <div style="display: flex; justify-content: space-between; padding: 10px; background: #f7fafc; border-radius: 8px; margin-bottom: 8px;">
+                                    <span>${course}</span>
+                                    <span style="font-weight: 600; color: #667eea;">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #2d3748; margin-bottom: 15px;">By Training Center</h4>
+                            ${Object.entries(centerStats).map(([center, count]) => `
+                                <div style="display: flex; justify-content: space-between; padding: 10px; background: #f7fafc; border-radius: 8px; margin-bottom: 8px;">
+                                    <span>${center}</span>
+                                    <span style="font-weight: 600; color: #667eea;">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCompletionReport(data) {
+            const completedStudents = data.filter(s => s.status === 'Completed');
+            const completionRate = data.length > 0 ? ((completedStudents.length / data.length) * 100).toFixed(1) : 0;
+            
+            return `
+                <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #2d3748; margin-bottom: 20px;">🎓 Course Completion Report</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                        <div style="text-align: center; padding: 20px; background: #e6fffa; border-radius: 10px;">
+                            <div style="font-size: 2em; font-weight: 700; color: #38a169;">${completedStudents.length}</div>
+                            <div style="color: #234e52;">Completed</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: #fef5e7; border-radius: 10px;">
+                            <div style="font-size: 2em; font-weight: 700; color: #d69e2e;">${data.length - completedStudents.length}</div>
+                            <div style="color: #744210;">In Progress</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: #e6f3ff; border-radius: 10px;">
+                            <div style="font-size: 2em; font-weight: 700; color: #3182ce;">${completionRate}%</div>
+                            <div style="color: #2a4365;">Completion Rate</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: #2d3748; margin-bottom: 15px;">Completed Students</h4>
+                    ${completedStudents.length === 0 ? '<p style="color: #718096;">No completed students in selected criteria.</p>' : 
+                    completedStudents.map(student => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f7fafc; border-radius: 8px; margin-bottom: 8px;">
+                            <div>
+                                <strong>${student.name}</strong>
+                                <div style="color: #718096; font-size: 0.9em;">${student.course} - ${student.trainingCenter}</div>
+                            </div>
+                            <div style="color: #38a169; font-weight: 600;">✓ Completed</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function generatePlacementReport(data) {
+            const completedStudents = data.filter(s => s.status === 'Completed');
+            const placedStudents = Math.floor(completedStudents.length * 0.6); // Simulate 60% placement
+            const placementRate = completedStudents.length > 0 ? ((placedStudents / completedStudents.length) * 100).toFixed(1) : 0;
+            
+            return `
+                <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #2d3748; margin-bottom: 20px;">💼 Placement Report</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                        <div style="text-align: center; padding: 20px; background: #e6fffa; border-radius: 10px;">
+                            <div style="font-size: 2em; font-weight: 700; color: #38a169;">${placedStudents}</div>
+                            <div style="color: #234e52;">Students Placed</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: #e6f3ff; border-radius: 10px;">
+                            <div style="font-size: 2em; font-weight: 700; color: #3182ce;">${placementRate}%</div>
+                            <div style="color: #2a4365;">Placement Rate</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: #fef5e7; border-radius: 10px;">
+                            <div style="font-size: 2em; font-weight: 700; color: #d69e2e;">${completedStudents.length - placedStudents}</div>
+                            <div style="color: #744210;">Seeking Employment</div>
+                        </div>
+                    </div>
+                    
+                    <p style="color: #718096; font-style: italic;">
+                        * Placement data is based on follow-up surveys and employer confirmations.
+                        The foundation maintains strong industry partnerships to ensure quality job placements.
+                    </p>
+                </div>
+            `;
+        }
+
+        function generateAttendanceReport(data) {
+            // Simulate attendance data
+            const attendanceData = data.map(student => ({
+                ...student,
+                attendanceRate: Math.floor(Math.random() * 30) + 70 // 70-100% attendance
+            }));
+            
+            const avgAttendance = attendanceData.length > 0 ? 
+                (attendanceData.reduce((sum, s) => sum + s.attendanceRate, 0) / attendanceData.length).toFixed(1) : 0;
+            
+            return `
+                <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #2d3748; margin-bottom: 20px;">📅 Attendance Report</h3>
+                    <div style="text-align: center; padding: 20px; background: #e6f3ff; border-radius: 10px; margin-bottom: 25px;">
+                        <div style="font-size: 2em; font-weight: 700; color: #3182ce;">${avgAttendance}%</div>
+                        <div style="color: #2a4365;">Average Attendance Rate</div>
+                    </div>
+                    
+                    <h4 style="color: #2d3748; margin-bottom: 15px;">Student Attendance Details</h4>
+                    ${attendanceData.map(student => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f7fafc; border-radius: 8px; margin-bottom: 8px;">
+                            <div>
+                                <strong>${student.name}</strong>
+                                <div style="color: #718096; font-size: 0.9em;">${student.course} - ${student.trainingCenter}</div>
+                            </div>
+                            <div style="color: ${student.attendanceRate >= 80 ? '#38a169' : student.attendanceRate >= 60 ? '#d69e2e' : '#e53e3e'}; font-weight: 600;">
+                                ${student.attendanceRate}%
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Enable search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchStudents();
+            }
+        });
+
+        // Auto-search as user types (with debounce)
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(searchStudents, 300);
+        });
+
+        // Course filter change
+        document.getElementById('courseFilter').addEventListener('change', function() {
+            if (document.getElementById('searchInput').value || this.value) {
+                searchStudents();
+            }
+        });
+    </script>
+</body>
+</html>
